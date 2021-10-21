@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
+pragma solidity ^0.7.0 <0.9.0;
+
+import "./lib/Boost.sol";
 
 contract Artwork {
-    string hash;
+    string public hash;
     address[] historyHolder;
     bool isInAuction = false;
     uint256 auctionStartTime;
@@ -36,12 +39,9 @@ contract Artwork {
     
     function collectBid() external payable inAuction {
         require(block.timestamp >= auctionEndTime, "Auction isn't ended");
+        require(currentBidder == tx.origin, "Transaction origin is not the final bidder");
         payable(historyHolder[historyHolder.length - 1]).transfer(currentBid);
         historyHolder.push(tx.origin);
         isInAuction = false;
     }
-}
-
-contract ArtFlake {
-    mapping(address => Artwork) public holds;
 }

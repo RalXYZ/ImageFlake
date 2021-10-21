@@ -1,2 +1,2 @@
 .idea
-contracts/artifacts
+contracts/**/artifacts
