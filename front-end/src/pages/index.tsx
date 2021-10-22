@@ -6,7 +6,7 @@ const IndexPage = () => {
         <title>Home Page</title>
         <h1>Welcome to my Gatsby site!</h1>
         <p>I'm making this by following the Gatsby Tutorial.</p>
-        <button>Home</button>
+        <button className="btn btn-primary">Home</button>
       </main>
   )
 }

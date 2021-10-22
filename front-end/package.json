@@ -15,10 +15,17 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "daisyui": "^1.14.7",
     "gatsby": "^4.0.0",
     "gatsby-plugin-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "sass": "^1.43.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.3.7",
+    "gatsby-plugin-postcss": "^5.0.0",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^2.2.17"
   }
 }

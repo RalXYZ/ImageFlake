@@ -3,5 +3,5 @@ module.exports = {
     siteUrl: "https://www.yourdomain.tld",
     title: "ImageFlake",
   },
-  plugins: ["gatsby-plugin-sass"],
+  plugins: ["gatsby-plugin-sass", 'gatsby-plugin-postcss',],
 };
