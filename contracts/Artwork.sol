@@ -7,7 +7,6 @@ contract Artwork {
     string public hash;
     address[] historyHolder;
     bool isInAuction = false;
-    uint256 auctionStartTime;
     uint256 auctionEndTime;
     address currentBidder;
     uint256 currentBid;
@@ -18,6 +17,7 @@ contract Artwork {
     }
     
     event holder(address addr);
+    event getTime(uint256 time);
     
     constructor(string memory artworkHash, address initHolder) payable {
         hash = artworkHash;
@@ -25,15 +25,17 @@ contract Artwork {
         emit holder(initHolder);
     }
     
-    function startAuction(uint256 _auctionStartTime, uint256 _auctionEndTime) external {
+    function startAuction(uint256 _auctionEndTime) external {
         require(!isInAuction, "There exists an on-going auction");
         require(historyHolder[historyHolder.length - 1] == tx.origin, "You are not the current owner");
         isInAuction = true;
-        auctionStartTime = _auctionStartTime;
         auctionEndTime = _auctionEndTime;
+
+        // Set owner as the first bidder, so that the artwork can be
+        // re-claimed by the owner if no one bidds it. 
+        currentBidder = tx.origin;
+        currentBid = 0;
     }
-    
-    event getTime(uint256 time);
     
     function bid(uint256 _bid) external inAuction {
         emit getTime(block.timestamp);
