@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.0 <0.9.0;
+pragma solidity ^0.8.9;
 
 import "./Artwork.sol";
 
 contract ArtFlake {
     mapping(address => Artwork[]) holds;
+    mapping(string => address) artworkHashToUser;
     
-    modifier hashUnique(string memory artworkHash) {
+    modifier hashUnique(string memory artworkHash) {  // FIXME: maybe we do not need this
         Artwork[] memory artworkArr = holds[tx.origin];
         for (uint i = 0; i < artworkArr.length; i++) {
             require(!Boost.streql(artworkArr[i].hash(), artworkHash), "The hash to be inserted already exists");
@@ -14,8 +15,8 @@ contract ArtFlake {
         _;
     }
     
-    function findHashIndex(string memory artworkHash) internal view returns(uint) {
-        Artwork[] memory artworkArr = holds[tx.origin];
+    function findHashIndex(string memory artworkHash, address holder) internal view returns(uint) {
+        Artwork[] memory artworkArr = holds[holder];
         for (uint i = 0; i < artworkArr.length; i++) {
             if (Boost.streql(artworkArr[i].hash(), artworkHash)) {
                 return i;
@@ -24,23 +25,35 @@ contract ArtFlake {
         revert("Hash index not found");
     }
     
-    function post(string memory artworkHash) external hashUnique(artworkHash) {
+    function post(string memory artworkHash) public hashUnique(artworkHash) {
         holds[tx.origin].push(new Artwork(artworkHash, tx.origin));
+        artworkHashToUser[artworkHash] = tx.origin; 
     }
     
     
     function startAuction(string memory artworkHash, uint256 auctionStartTime, uint256 auctionEndTime) external {
-        uint index = findHashIndex(artworkHash);
+        uint index = findHashIndex(artworkHash, tx.origin);
         holds[tx.origin][index].startAuction(auctionStartTime, auctionEndTime);
     }
     
     function bid(string memory artworkHash, uint256 _bid) external {
-        uint index = findHashIndex(artworkHash);
-        holds[tx.origin][index].bid(_bid);
+        address currentOwner = artworkHashToUser[artworkHash];
+        uint index = findHashIndex(artworkHash, currentOwner);
+        holds[currentOwner][index].bid(_bid);
     }
     
     function collectBid(string memory artworkHash) external payable {
-        uint index = findHashIndex(artworkHash);
-        holds[tx.origin][index].collectBid();
+        address lastHolder = artworkHashToUser[artworkHash];
+        uint lastHolderIndex = findHashIndex(artworkHash, lastHolder);
+        artworkHashToUser[artworkHash] = tx.origin;
+        
+        holds[lastHolder][lastHolderIndex].collectBid{value: msg.value}();
+        for (uint i = lastHolderIndex + 1; i < holds[lastHolder].length; i++) {
+            holds[lastHolder][i - 1] = holds[lastHolder][i];
+        }
+        
+        Artwork art = holds[lastHolder][lastHolderIndex];
+        holds[lastHolder].pop();
+        holds[tx.origin].push(art);
     }
 }

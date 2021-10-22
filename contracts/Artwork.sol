@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.7.0 <0.9.0;
+pragma solidity ^0.8.9;
 
 import "./lib/Boost.sol";
 
@@ -17,9 +17,12 @@ contract Artwork {
         _;
     }
     
-    constructor(string memory artworkHash, address initHolder) {
+    event holder(address addr);
+    
+    constructor(string memory artworkHash, address initHolder) payable {
         hash = artworkHash;
         historyHolder.push(initHolder);
+        emit holder(initHolder);
     }
     
     function startAuction(uint256 _auctionStartTime, uint256 _auctionEndTime) external {
@@ -30,18 +33,23 @@ contract Artwork {
         auctionEndTime = _auctionEndTime;
     }
     
+    event getTime(uint256 time);
+    
     function bid(uint256 _bid) external inAuction {
-        require(block.timestamp < auctionEndTime, "Auction is ended");
+        emit getTime(block.timestamp);
+        require(block.timestamp < auctionEndTime, "The auction has ended");
         require(_bid > currentBid, "Your bid is lower than the current bidder");
         currentBid = _bid;
         currentBidder = tx.origin;
     }
     
-    function collectBid() external payable inAuction {
+    function collectBid() external payable inAuction returns(address) {
         require(block.timestamp >= auctionEndTime, "Auction isn't ended");
         require(currentBidder == tx.origin, "Transaction origin is not the final bidder");
         payable(historyHolder[historyHolder.length - 1]).transfer(currentBid);
+        address lastHolder = historyHolder[historyHolder.length - 1];
         historyHolder.push(tx.origin);
         isInAuction = false;
+        return lastHolder;
     }
 }
