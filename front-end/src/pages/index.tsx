@@ -1,4 +1,5 @@
 import * as React from 'react';
+import '../styles/primary.sass'
 
 const IndexPage = () => {
   let foo = async (e) => {
