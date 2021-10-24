@@ -12,3 +12,10 @@
 
 *Image Flake* is a NFT (non-fungible token) auction platform Dapp (decentralized application). User of this Dapp can upload, sell and purchase artworks using ETH. The artwork can only be bought in auctions, and the owner of the artwork can start an auction at any time.  
 All the persistent data of this app is decentralized. The transaction information is stored on Ethereum chain, and the object files are stored in IPFS.  
+
+
+### Configuration File Template
+Create configuration file `front-end/config/eth.yaml`:  
+```yaml
+contractAddress: "0xabcdefg"  # your contract address
+```

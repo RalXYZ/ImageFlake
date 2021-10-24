@@ -7,4 +7,4 @@ if (window.ethereum) {
     alert("It seems like you haven't installed MetaMask browser extension yet");
 }
 window.ethereum.request({ method: 'eth_requestAccounts' });
-module.exports = web3;
+export default web3;
