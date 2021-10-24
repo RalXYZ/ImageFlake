@@ -16,20 +16,17 @@ class MyEth {
   }
  
   async getAccount() {
-    this.account = (await window.ethereum.request({ method: 'eth_accounts' }))[0];
+    this.account = window.ethereum.request({ 
+      method: 'eth_accounts' 
+    }).catch(console.log);
   }
 
   async publish(artworkHash: string) {
-    console.log(this.artFlake.methods);
-    try {
-      await this.artFlake.methods.post(artworkHash).send({
-        from: this.account,
-        // value: web3.utils.toWei('1', 'ether'),
-        gas: '3000000',
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    this.artFlake.methods.post(artworkHash).send({
+      from: this.account,
+      // value: web3.utils.toWei('1', 'ether'),
+      gas: '3000000',
+    }).catch(console.log);
   }
 }
 
@@ -40,7 +37,7 @@ if (window.ethereum) {
 } else {
     alert("It seems like you haven't installed MetaMask browser extension yet");
 }
-window.ethereum.request({ method: 'eth_requestAccounts' });
+// window.ethereum.request({ method: 'eth_requestAccounts' });
 
 let artFlake = new web3.eth.Contract(artFlakeBuild.abi, ethConfig.contractAddress);
 

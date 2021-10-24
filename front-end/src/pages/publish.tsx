@@ -31,7 +31,7 @@ class Publish extends Component {
               <label className="label">
                 <span className="label-text">Hash</span>
               </label>
-              <input type="text" placeholder="hash" value={this.state.value} onChange={this.handleChange}className="input"/>
+              <input type="text" placeholder="hash" value={this.state.value} onChange={this.handleChange} className="input"/>
               <button className="btn btn-primary" type="submit">Submit</button>
             </form>
           </div>
