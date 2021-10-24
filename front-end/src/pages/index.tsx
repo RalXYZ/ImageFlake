@@ -1,19 +1,24 @@
 import * as React from 'react';
-import '../styles/primary.sass'
-import artFlake from '../scripts/solidityAbi';
+import * as IPFS from 'ipfs-core';
+import Navbar from '../components/navbar';
 
 const IndexPage = () => {
-  let foo = async (e) => {
-    e.preventDefault();
-    /*
-    let web3 = require('../scripts/initWeb3');
-    console.log(web3);
-    console.log(await web3.eth.getAccounts());
-    */
-   console.log(artFlake);
+  let foo = async () => {
+    const node = await IPFS.create();
+    const { cid } = await node.add('Hello world');
+    const cidStr = cid.toString();
+    console.log(cidStr);
+    
+    const stream = node.cat(cidStr);
+    let data = '';
+    for await (const chunk of stream) {
+      data += chunk.toString();
+    }
+    console.log(data);
   };
   return (
       <main>
+        <Navbar/>
         <title>Home Page</title>
         <h1>Welcome to my Gatsby site!</h1>
         <p>I'm making this by following the Gatsby Tutorial.</p>
