@@ -27,12 +27,19 @@ class MyEth {
     console.log(this.account);
   }
 
-  publish(artworkHash: string) {
-    this.artFlake.methods.post(artworkHash).send({
+  async publish(artworkHash: string)  {
+    /*
+    return new Promise((resolve, reject) => {
+      .catch((err) => {
+        reject(err);
+      });
+      resolve();
+    })*/
+    await this.artFlake.methods.post(artworkHash).send({
       from: this.account,
       // value: web3.utils.toWei('1', 'ether'),
       gas: '3000000',
-    }).catch(console.log);
+    })
   }
 }
 

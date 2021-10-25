@@ -3,12 +3,26 @@ import { Component } from 'react';
 import { create } from 'ipfs-http-client';
 import myEth from '../scripts/myEth';
 import Navbar from '../components/navbar';
+import AlertOk from '../components/alert';
 import ethConfig from '../../config/eth.yaml';
 
-class Publish extends Component<{}, {value: File}> {
+export interface AlertInterface {
+  state: "error" | "success";
+  hidden: boolean;
+  message: string;
+}
+
+class Publish extends Component<{}, {file: File, alert: AlertInterface}> {
   constructor(props) {
     super(props);
-    this.state = {value: null};
+    this.state = {
+      file: null,
+      alert: {
+        state: "error",
+        hidden: true,
+        message: "",
+      }
+    };
 
     this.onImageChange = this.onImageChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,9 +31,9 @@ class Publish extends Component<{}, {value: File}> {
   async onImageChange(e) {
     if (e.target.files && e.target.files[0]) {
       await this.setState({
-        value: e.target.files[0]
+        file: e.target.files[0],
       });
-      console.log(this.state.value);
+      console.log(this.state.file);
     }
   }
 
@@ -33,18 +47,29 @@ class Publish extends Component<{}, {value: File}> {
       port: 5001,
       protocol: 'https',
       headers: {
-        authorization: auth
+        authorization: auth,
       }
     });
     console.log(client);
-    console.log(this.state.value);
-    const added = await client.add(this.state.value, {
+    console.log(this.state.file);
+    const added = await client.add(this.state.file, {
       progress: (prog) => console.log(`received: ${prog}`)
     });
     console.log(added);
     const url = `https://ipfs.infura.io/ipfs/${added.path}`;
     console.log(url);
-    myEth.publish(added.path);
+    try { 
+      await myEth.publish(added.path);
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        alert: {
+          state: "error",
+          hidden: false,
+          message: err.message,
+        }
+      })
+    }
   }
 
   render() {
@@ -58,11 +83,18 @@ class Publish extends Component<{}, {value: File}> {
               <label className="label">
                 <span className="label-text">Artwork</span>
               </label>
-              <input type="file" name="myImage" onChange={this.onImageChange} className="input"/>
+              <label className="btn btn-outline btn-lg">
+                <span>Select a file</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-6 h-6 ml-2 stroke-current">  
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>                        
+                </svg>
+                <input type="file" name="myImage" onChange={this.onImageChange} className="hidden"/>
+              </label>
               <button className="btn btn-primary" type="submit">Submit</button>
             </form>
           </div>
         </div>
+        <AlertOk alert={this.state.alert}/>
       </div>
     )
   }
