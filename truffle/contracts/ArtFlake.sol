@@ -44,6 +44,10 @@ contract ArtFlake {
         revert("Hash index not found");
     }
     
+    function listOwned() external view returns(Artwork[] memory) {
+        return holds[tx.origin];
+    }
+    
     // Create a new artwork
     function post(string memory artworkHash) external hashUnique(artworkHash) {
         holds[tx.origin].push(new Artwork(artworkHash, tx.origin));
