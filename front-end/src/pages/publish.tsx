@@ -3,7 +3,7 @@ import { Component } from 'react';
 import myEth from '../scripts/myEth';
 import Navbar from '../components/navbar';
 
-class Publish extends Component {
+class Publish extends Component<{}, {value: string}> {
   constructor(props) {
     super(props);
     this.state = {value: ''};
@@ -12,8 +12,8 @@ class Publish extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  handleChange(e) {
+    this.setState({value: e.target.value});
   }
 
   handleSubmit(e) {
@@ -22,6 +22,7 @@ class Publish extends Component {
   }
 
   render() {
+    
     return (
       <div>
         <Navbar/>

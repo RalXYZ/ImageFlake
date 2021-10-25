@@ -1,5 +1,6 @@
 import Web3 from 'web3';
-import { Contract } from 'web3-eth-contract';
+import type { Contract } from 'web3-eth-contract';
+import type { AbiItem } from 'web3-utils';
 import artFlakeBuild from '../../../truffle/build/contracts/ArtFlake.json';  // truffle default compile location
 import ethConfig from '../../config/eth.yaml';
 
@@ -16,12 +17,17 @@ class MyEth {
   }
  
   async getAccount() {
-    this.account = window.ethereum.request({ 
-      method: 'eth_accounts' 
-    }).catch(console.log);
+    try {
+      [this.account] = await window.ethereum.request({ 
+        method: 'eth_accounts' 
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(this.account);
   }
 
-  async publish(artworkHash: string) {
+  publish(artworkHash: string) {
     this.artFlake.methods.post(artworkHash).send({
       from: this.account,
       // value: web3.utils.toWei('1', 'ether'),
@@ -39,7 +45,7 @@ if (window.ethereum) {
 }
 // window.ethereum.request({ method: 'eth_requestAccounts' });
 
-let artFlake = new web3.eth.Contract(artFlakeBuild.abi, ethConfig.contractAddress);
+let artFlake = new web3.eth.Contract(artFlakeBuild.abi as AbiItem[], ethConfig.contractAddress);
 
 let myEth = new MyEth(web3, artFlake);
 export default myEth;
