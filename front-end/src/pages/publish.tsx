@@ -60,6 +60,13 @@ class Publish extends Component<{}, {file: File, alert: AlertInterface}> {
     console.log(url);
     try { 
       await myEth.publish(added.path);
+      this.setState({
+        alert: {
+          state: "success",
+          hidden: false,
+          message: "Publish success",
+        }
+      })
     } catch (err) {
       console.log(err);
       this.setState({
