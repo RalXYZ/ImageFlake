@@ -1,9 +1,9 @@
 import * as React from 'react';
-import * as IPFS from 'ipfs-core';
 import Navbar from '../components/navbar';
 
 const IndexPage = () => {
   let foo = async () => {
+    /*
     const node = await IPFS.create();
     const { cid } = await node.add('Hello world');
     const cidStr = cid.toString();
@@ -15,6 +15,7 @@ const IndexPage = () => {
       data += chunk.toString();
     }
     console.log(data);
+    */
   };
   return (
       <main>
