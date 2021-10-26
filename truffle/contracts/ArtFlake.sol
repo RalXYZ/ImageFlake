@@ -5,6 +5,8 @@ import "./Artwork.sol";
 
 struct ArtworkBrief {
     string hash;
+    string name;
+    string description;
     bool isInAuction;
     uint256 auctionEndTime;
 }
@@ -57,6 +59,8 @@ contract ArtFlake {
         for (uint i = 0; i < holds[tx.origin].length; i++) {
             ret[i] = ArtworkBrief(
                 holds[tx.origin][i].hash(),
+                holds[tx.origin][i].name(),
+                holds[tx.origin][i].description(),
                 holds[tx.origin][i].isInAuction(),
                 holds[tx.origin][i].auctionEndTime()
             );
@@ -65,8 +69,8 @@ contract ArtFlake {
     }
     
     // Create a new artwork
-    function post(string memory artworkHash) external hashUnique(artworkHash) {
-        holds[tx.origin].push(new Artwork(artworkHash, tx.origin));
+    function post(string memory _name, string memory _description, string memory artworkHash) external hashUnique(artworkHash) {
+        holds[tx.origin].push(new Artwork(_name, _description, artworkHash, tx.origin));
         artworkHashToUser[artworkHash] = tx.origin; 
     }
     

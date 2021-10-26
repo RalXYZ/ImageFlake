@@ -4,12 +4,14 @@ pragma solidity ^0.8.9;
 import "./lib/Boost.sol";
 
 contract Artwork {
+    string public name;
+    string public description;
     string public hash;
-    address[] historyHolder;
+    address[] public historyHolder;
     bool public isInAuction = false;
     uint256 public auctionEndTime;
-    address currentBidder;
-    uint256 currentBid;
+    address public currentBidder;
+    uint256 public currentBid;
     
     modifier inAuction() {
         require(isInAuction, "Auction of this artwork hasn't been stated");
@@ -19,7 +21,9 @@ contract Artwork {
     event holder(address addr);
     event getTime(uint256 time);
     
-    constructor(string memory artworkHash, address initHolder) payable {
+    constructor(string memory _name, string memory _description, string memory artworkHash, address initHolder) payable {
+        name = _name;
+        description = _description;
         hash = artworkHash;
         historyHolder.push(initHolder);
         emit holder(initHolder);
