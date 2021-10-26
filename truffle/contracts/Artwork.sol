@@ -6,8 +6,8 @@ import "./lib/Boost.sol";
 contract Artwork {
     string public hash;
     address[] historyHolder;
-    bool isInAuction = false;
-    uint256 auctionEndTime;
+    bool public isInAuction = false;
+    uint256 public auctionEndTime;
     address currentBidder;
     uint256 currentBid;
     

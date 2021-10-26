@@ -3,6 +3,12 @@ pragma solidity ^0.8.9;
 
 import "./Artwork.sol";
 
+struct ArtworkBrief {
+    string hash;
+    bool isInAuction;
+    uint256 auctionEndTime;
+}
+
 contract ArtFlake {
 
     // We need this mapping because we need to show all the
@@ -33,7 +39,7 @@ contract ArtFlake {
     // We have defined mapping 'address => Artwork[]' above.
     // This function tries to find the index of an artwork
     // in artwork array by matching the artwork hash. The
-    // artwork array is get by holder's address
+    // artwork array is get by holder's address.
     function findHashIndex(string memory artworkHash, address holder) internal view returns(uint) {
         Artwork[] memory artworkArr = holds[holder];
         for (uint i = 0; i < artworkArr.length; i++) {
@@ -44,8 +50,18 @@ contract ArtFlake {
         revert("Hash index not found");
     }
     
-    function listOwned() external view returns(Artwork[] memory) {
-        return holds[tx.origin];
+    // Show a list which contains brief information of
+    // all owned artwork of a user.
+    function listOwned() external view returns(ArtworkBrief[] memory) {
+        ArtworkBrief[] memory ret = new ArtworkBrief[](holds[tx.origin].length);
+        for (uint i = 0; i < holds[tx.origin].length; i++) {
+            ret[i] = ArtworkBrief(
+                holds[tx.origin][i].hash(),
+                holds[tx.origin][i].isInAuction(),
+                holds[tx.origin][i].auctionEndTime()
+            );
+        }
+        return ret;
     }
     
     // Create a new artwork
