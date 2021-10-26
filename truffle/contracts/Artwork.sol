@@ -4,9 +4,9 @@ pragma solidity ^0.8.9;
 import "./lib/Boost.sol";
 
 contract Artwork {
+    string public hash;
     string public name;
     string public description;
-    string public hash;
     address[] public historyHolder;
     bool public isInAuction = false;
     uint256 public auctionEndTime;
@@ -21,12 +21,20 @@ contract Artwork {
     event holder(address addr);
     event getTime(uint256 time);
     
-    constructor(string memory _name, string memory _description, string memory artworkHash, address initHolder) payable {
+    constructor(string memory artworkHash, address initHolder, string memory _name, string memory _description) payable {
         name = _name;
         description = _description;
         hash = artworkHash;
         historyHolder.push(initHolder);
         emit holder(initHolder);
+    }
+    
+    function getHistoryHolder() external view returns(address[] memory) {
+        address[] memory ret = new address[](historyHolder.length);
+        for (uint i = 0; i < historyHolder.length; i++) {
+            ret[i] = historyHolder[i];
+        }
+        return ret;
     }
     
     function startAuction(uint256 _auctionEndTime) external {

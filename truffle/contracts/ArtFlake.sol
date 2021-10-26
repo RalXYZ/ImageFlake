@@ -11,6 +11,17 @@ struct ArtworkBrief {
     uint256 auctionEndTime;
 }
 
+struct ArtworkDetail {
+    string hash;
+    string name;
+    string description;
+    bool isInAuction;
+    uint256 auctionEndTime;
+    address[] historyHolder;
+    address currentBidder;
+    uint256 currentBid;
+}
+
 contract ArtFlake {
 
     // We need this mapping because we need to show all the
@@ -29,11 +40,12 @@ contract ArtFlake {
     // we can locate a specific artwork.
     mapping(string => address) artworkHashToUser;
     
+    Artwork[] allArtworks;
+    
     // FIXME: maybe we do not need this
     modifier hashUnique(string memory artworkHash) {
-        Artwork[] memory artworkArr = holds[tx.origin];
-        for (uint i = 0; i < artworkArr.length; i++) {
-            require(!Boost.streql(artworkArr[i].hash(), artworkHash), "The hash to be inserted already exists");
+        for (uint i = 0; i < allArtworks.length; i++) {
+            require(!Boost.streql(allArtworks[i].hash(), artworkHash), "The hash to be inserted already exists");
         }
         _;
     }
@@ -68,10 +80,55 @@ contract ArtFlake {
         return ret;
     }
     
+    function get(string memory hash) external view returns(ArtworkDetail memory) {
+        for (uint i = 0; i < allArtworks.length; i++) {
+            if (!Boost.streql(hash, allArtworks[i].hash())) {
+                continue;
+            }
+            return ArtworkDetail(
+                allArtworks[i].hash(),
+                allArtworks[i].name(),
+                allArtworks[i].description(),
+                allArtworks[i].isInAuction(),
+                allArtworks[i].auctionEndTime(),
+                allArtworks[i].getHistoryHolder(),
+                allArtworks[i].currentBidder(),
+                allArtworks[i].currentBid()
+            );
+        }
+        revert("Hash index not found");
+    }
+    
+    function getAuction() external view returns(ArtworkBrief[] memory) {
+        uint count = 0;
+        for (uint i = 0; i < allArtworks.length; i++) {
+            if (allArtworks[i].isInAuction()) {
+                count++;
+            }
+        }
+        ArtworkBrief[] memory ret = new ArtworkBrief[](count);
+        count = 0;
+        for (uint i = 0; i < allArtworks.length; i++) {
+            if (allArtworks[i].isInAuction()) {
+                ret[count] = ArtworkBrief(
+                    allArtworks[i].hash(),
+                    allArtworks[i].name(),
+                    allArtworks[i].description(),
+                    allArtworks[i].isInAuction(),
+                    allArtworks[i].auctionEndTime()
+                );
+                count++;
+            }
+        }
+        return ret;
+    }
+    
     // Create a new artwork
-    function post(string memory _name, string memory _description, string memory artworkHash) external hashUnique(artworkHash) {
-        holds[tx.origin].push(new Artwork(_name, _description, artworkHash, tx.origin));
-        artworkHashToUser[artworkHash] = tx.origin; 
+    function post(string memory artworkHash, string memory _name, string memory _description) external hashUnique(artworkHash) {
+        Artwork newArtwork = new Artwork(artworkHash, tx.origin, _name, _description);
+        holds[tx.origin].push(newArtwork);
+        allArtworks.push(newArtwork);
+        artworkHashToUser[artworkHash] = tx.origin;
     }
     
     // Start an auction. This operation can only be done by
