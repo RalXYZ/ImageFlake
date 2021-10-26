@@ -16,13 +16,13 @@ export default () => (
               <Link to="/">Home</Link>
             </li> 
             <li>
-            <Link to="/publish/">Publish</Link>
+              <Link to="/publish/">Publish</Link>
             </li> 
             <li>
               <a>Bid</a>
             </li>
             <li>
-              <a>Collect</a>
+            <Link to="/me/">Me</Link>
             </li>
           </ul>
         </div>
@@ -39,7 +39,7 @@ export default () => (
         <Link to="/" className="btn btn-ghost btn-sm rounded-btn">Home</Link>
         <Link to="/publish/" className="btn btn-ghost btn-sm rounded-btn">Publish</Link>
         <Link to="/bid/" className="btn btn-ghost btn-sm rounded-btn">Bid</Link>
-        <Link to="/collect/" className="btn btn-ghost btn-sm rounded-btn">Collect</Link>
+        <Link to="/me/" className="btn btn-ghost btn-sm rounded-btn">Me</Link>
       </div>
     </div> 
 

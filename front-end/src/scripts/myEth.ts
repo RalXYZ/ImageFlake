@@ -1,8 +1,15 @@
+import { Link } from 'gatsby';
 import Web3 from 'web3';
 import type { Contract } from 'web3-eth-contract';
 import type { AbiItem } from 'web3-utils';
 import artFlakeBuild from '../../../truffle/build/contracts/ArtFlake.json';  // truffle default compile location
 import ethConfig from '../../config/eth.yaml';
+
+export interface ArtworkBrief {
+  hash: string;
+  isInAuction: boolean;
+  auctionEndTime: number;
+}
 
 class MyEth {
   web3: Web3;
@@ -27,19 +34,21 @@ class MyEth {
     console.log(this.account);
   }
 
-  async publish(artworkHash: string)  {
-    /*
-    return new Promise((resolve, reject) => {
-      .catch((err) => {
-        reject(err);
-      });
-      resolve();
-    })*/
-    await this.artFlake.methods.post(artworkHash).send({
+  async listOwned(): Promise<ArtworkBrief[]> {
+    return await this.artFlake.methods.listOwned().call({
       from: this.account,
       // value: web3.utils.toWei('1', 'ether'),
       gas: '3000000',
-    })
+    });
+  }
+
+  async publish(artworkHash: string)  {
+    let foo = await this.artFlake.methods.post(artworkHash).send({
+      from: this.account,
+      // value: web3.utils.toWei('1', 'ether'),
+      gas: '3000000',
+    });
+    console.log(foo);
   }
 }
 

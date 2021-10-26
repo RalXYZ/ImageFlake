@@ -50,4 +50,5 @@ const Alert: FC<{
     </div>
   </div>
 );
+
 export default Alert;
