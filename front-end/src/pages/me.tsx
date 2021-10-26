@@ -35,7 +35,7 @@ class Me extends Component<{}, { artworks: ArtworkBrief[] }> {
   render() {
     return (
       <div>
-        <Navbar />
+        <Navbar currentTab="me"/>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {this.state.artworks.map(e => this.constructArtworkCard(e))}
         </div>

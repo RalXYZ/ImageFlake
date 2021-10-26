@@ -12,11 +12,12 @@ export interface AlertInterface {
   message: string;
 }
 
-class Publish extends Component<{}, {file: File, alert: AlertInterface}> {
+class Publish extends Component<{}, {file: File, submitting: boolean, alert: AlertInterface}> {
   constructor(props) {
     super(props);
     this.state = {
       file: null,
+      submitting: false,
       alert: {
         state: "error",
         hidden: true,
@@ -39,6 +40,7 @@ class Publish extends Component<{}, {file: File, alert: AlertInterface}> {
 
   async handleSubmit(e) {
     e.preventDefault();
+    this.setState({submitting: true});
     const projectId = ethConfig.infura.projectId;
     const projectSecret = ethConfig.infura.projectSecret;
     const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
@@ -76,28 +78,43 @@ class Publish extends Component<{}, {file: File, alert: AlertInterface}> {
           message: err.message,
         }
       })
+    } finally {
+      this.setState({submitting: false});
     }
+    
   }
 
   render() {
-
     return (
       <div>
-        <Navbar/>
+        <Navbar currentTab="publish"/>
         <div className="p-10 card bg-base-200">
           <div className="form-control">
             <form onSubmit={this.handleSubmit}>
+
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label> 
+              <input type="text" placeholder="name" className="input"/>
+
+              <label className="label">
+                <span className="label-text">Description</span>
+              </label> 
+              <input type="text" placeholder="description" className="input"/>
+
               <label className="label">
                 <span className="label-text">Artwork</span>
               </label>
-              <label className="btn btn-outline btn-lg">
-                <span>Select a file</span>
+              <label className={`btn btn-outline ${this.state.file === null ? "" : "btn-accent"}`}>
+                <span>{this.state.file === null ? "Select a file" : this.state.file.name}</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-6 h-6 ml-2 stroke-current">  
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>                        
                 </svg>
                 <input type="file" name="myImage" onChange={this.onImageChange} className="hidden"/>
               </label>
-              <button className="btn btn-primary" type="submit">Submit</button>
+
+              <button className={`btn btn-primary btn-lg block my-4 ${this.state.submitting ? "loading" : ""}`} type="submit">Submit Artwork</button>
+
             </form>
           </div>
         </div>

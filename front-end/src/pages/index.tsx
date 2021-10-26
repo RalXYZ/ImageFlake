@@ -6,7 +6,7 @@ import ArtworkCard from "../components/artworkCard";
 const IndexPage = () => {
   return (
     <main>
-      <Navbar />
+      <Navbar currentTab="home"/>
       <div className="card">
         <div
           className="hero min-h-screen"

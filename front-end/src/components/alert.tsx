@@ -44,7 +44,7 @@ const Alert: FC<{
         )}
       </div>
       <div
-        style={{ display: props.alert.state == "success" ? "block" : "none" }}
+        style={{ display: props.alert.state === "success" ? "block" : "none" }}
       ></div>
       <label>{props.alert.message}</label>
     </div>

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { FC } from "react";
 import { Link } from "gatsby";
 
-export default () => (
+const Navbar: FC<{
+  currentTab: "home" | "publish" | "me" | "other";
+}> = (props) => (
   <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box">
     <div className="navbar-start">
       <div className="flex-none">
@@ -36,10 +38,10 @@ export default () => (
 
     <div className="hidden px-2 mx-2 navbar-center lg:flex">
       <div className="flex items-stretch">
-        <Link to="/" className="btn btn-ghost btn-sm rounded-btn">Home</Link>
-        <Link to="/publish/" className="btn btn-ghost btn-sm rounded-btn">Publish</Link>
+        <Link to="/" className={`btn ${props.currentTab === "home" ? "btn-primary" : "btn-ghost"} btn-sm rounded-btn`}>Home</Link>
+        <Link to="/publish/" className={`btn ${props.currentTab === "publish" ? "btn-primary" : "btn-ghost"}  btn-sm rounded-btn`}>Publish</Link>
         <Link to="/bid/" className="btn btn-ghost btn-sm rounded-btn">Bid</Link>
-        <Link to="/me/" className="btn btn-ghost btn-sm rounded-btn">Me</Link>
+        <Link to="/me/" className={`btn ${props.currentTab === "me" ? "btn-primary" : "btn-ghost"} btn-sm rounded-btn`}>Me</Link>
       </div>
     </div> 
 
@@ -61,3 +63,5 @@ export default () => (
     </div>
   </div>
 );
+
+export default Navbar;
