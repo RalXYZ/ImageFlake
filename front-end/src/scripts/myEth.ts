@@ -48,12 +48,16 @@ class MyEth {
   }
 
   async listOwned(): Promise<ArtworkBrief[]> {
-    return await this.artFlake.methods.listOwned().call();
+    return await this.artFlake.methods.listOwned().call({
+      from: this.account,
+    });
   }
 
   async get(hash: string): Promise<ArtworkDetail> {
     console.log(hash);
-    return await this.artFlake.methods.get(hash).call();
+    return await this.artFlake.methods.get(hash).call({
+      from: this.account,
+    });
   }
 
   async publish(artworkHash: string, name: string, description: string)  {

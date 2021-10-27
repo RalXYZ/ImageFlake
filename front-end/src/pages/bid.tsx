@@ -150,7 +150,7 @@ class Bid extends Component<
                     value={this.state.selectedTime}
                     onChange={this.handleSelectionChange}
                   >
-                    <option disabled={true} selected={true} value="default">
+                    <option disabled={true} value="default">
                       Auction time
                     </option>
                     <option value="minuet">1 minuet</option>
