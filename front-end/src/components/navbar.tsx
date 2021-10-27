@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 import myEth from "../scripts/myEth";
 
 const Navbar: FC<{
-  currentTab: "home" | "publish" | "me" | "other";
+  currentTab: "home" | "publish" | "market" | "me" | "other";
 }> = (props) => (
   <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box">
     <div className="navbar-start">
@@ -35,7 +35,7 @@ const Navbar: FC<{
               <Link to="/publish/">Publish</Link>
             </li>
             <li>
-              <a>Bid</a>
+              <Link to="/market/">Market</Link>
             </li>
             <li>
               <Link to="/me/">Me</Link>
@@ -62,12 +62,14 @@ const Navbar: FC<{
           to="/publish/"
           className={`btn ${
             props.currentTab === "publish" ? "btn-primary" : "btn-ghost"
-          }  btn-sm rounded-btn`}
+          } btn-sm rounded-btn`}
         >
           Publish
         </Link>
-        <Link to="/bid/" className="btn btn-ghost btn-sm rounded-btn">
-          Bid
+        <Link to="/market/" className={`btn ${
+            props.currentTab === "market" ? "btn-primary" : "btn-ghost"
+          } btn-sm rounded-btn`}>
+          Market
         </Link>
         <Link
           to="/me/"
@@ -84,7 +86,9 @@ const Navbar: FC<{
       <div className="flex-none">
         <div className="avatar placeholder">
           <div className="bg-neutral-focus text-neutral-content rounded-full w-10 h-10 ring ring-primary ring-offset-base-100 ring-offset-2">
-            <span>{myEth.account == undefined ? "?" : myEth.account.slice(2, 4)}</span>
+            <span>
+              {myEth.account == undefined ? "?" : myEth.account.slice(2, 4)}
+            </span>
           </div>
         </div>
       </div>

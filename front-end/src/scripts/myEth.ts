@@ -60,6 +60,12 @@ class MyEth {
     });
   }
 
+  async getAuctioning(): Promise<ArtworkBrief[]> {
+    return await this.artFlake.methods.getAuction().call({
+      from: this.account,
+    });
+  }
+
   async publish(artworkHash: string, name: string, description: string)  {
     let foo = await this.artFlake.methods.post(artworkHash, name, description).send({
       from: this.account,
