@@ -3,7 +3,7 @@ import { Link } from "gatsby";
 import myEth from "../scripts/myEth";
 
 const Navbar: FC<{
-  currentTab: "home" | "publish" | "market" | "me" | "other";
+  currentTab: "home" | "publish" | "market" | "other";
 }> = (props) => (
   <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content rounded-box">
     <div className="navbar-start">
@@ -37,9 +37,6 @@ const Navbar: FC<{
             <li>
               <Link to="/market/">Market</Link>
             </li>
-            <li>
-              <Link to="/me/">Me</Link>
-            </li>
           </ul>
         </div>
       </div>
@@ -71,18 +68,11 @@ const Navbar: FC<{
           } btn-sm rounded-btn`}>
           Market
         </Link>
-        <Link
-          to="/me/"
-          className={`btn ${
-            props.currentTab === "me" ? "btn-primary" : "btn-ghost"
-          } btn-sm rounded-btn`}
-        >
-          Me
-        </Link>
       </div>
     </div>
 
     <div className="navbar-end">
+    <Link to="/me/">
       <div className="flex-none">
         <div className="avatar placeholder">
           <div className="bg-neutral-focus text-neutral-content rounded-full w-10 h-10 ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -92,6 +82,7 @@ const Navbar: FC<{
           </div>
         </div>
       </div>
+      </Link>
     </div>
   </div>
 );
