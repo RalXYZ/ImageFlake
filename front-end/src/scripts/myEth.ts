@@ -7,6 +7,8 @@ import ethConfig from '../../config/eth.yaml';
 
 export interface ArtworkBrief {
   hash: string;
+  name: string;
+  description: string;
   isInAuction: boolean;
   auctionEndTime: number;
 }
@@ -42,8 +44,8 @@ class MyEth {
     });
   }
 
-  async publish(artworkHash: string)  {
-    let foo = await this.artFlake.methods.post(artworkHash).send({
+  async publish(artworkHash: string, name: string, description: string)  {
+    let foo = await this.artFlake.methods.post(artworkHash, name, description).send({
       from: this.account,
       // value: web3.utils.toWei('1', 'ether'),
       gas: '3000000',

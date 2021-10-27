@@ -29,7 +29,7 @@ class Me extends Component<{}, { artworks: ArtworkBrief[] }> {
       }
     }
     const url = `https://ipfs.infura.io/ipfs/${artwork.hash}`;
-    return <ArtworkCard imgUrl={url} filename="foo" status={artworkStatus}/>;
+    return <ArtworkCard imgUrl={url} name={artwork.name} description={artwork.description} status={artworkStatus}/>;
   }
 
   render() {

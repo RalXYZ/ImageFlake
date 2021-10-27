@@ -15,6 +15,8 @@ export interface AlertInterface {
 class Publish extends Component<
   {},
   {
+    name: string;
+    description: string;
     file: File;
     backgroundUrl: string;
     submitting: boolean;
@@ -24,7 +26,9 @@ class Publish extends Component<
   constructor(props) {
     super(props);
     this.state = {
-      file: null,
+      name: "",
+      description: "",
+      file: undefined,
       backgroundUrl:
         "https://images.pexels.com/photos/158571/architecture-about-building-modern-158571.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
       submitting: false,
@@ -36,6 +40,8 @@ class Publish extends Component<
     };
 
     this.onImageChange = this.onImageChange.bind(this);
+    this.handleNameChange= this.handleNameChange.bind(this);
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -51,6 +57,14 @@ class Publish extends Component<
       };
       fileReader.readAsDataURL(this.state.file);
     }
+  }
+
+  handleNameChange(e) {
+    this.setState({name: e.target.value});
+  }
+
+  handleDescriptionChange(e) {
+    this.setState({description: e.target.value});
   }
 
   async handleSubmit(e) {
@@ -71,6 +85,8 @@ class Publish extends Component<
     });
     console.log(client);
     console.log(this.state.file);
+    console.log(this.state.name);
+    console.log(this.state.description);
     const added = await client.add(this.state.file, {
       progress: (prog) => console.log(`received: ${prog}`),
     });
@@ -78,7 +94,7 @@ class Publish extends Component<
     const url = `https://ipfs.infura.io/ipfs/${added.path}`;
     console.log(url);
     try {
-      await myEth.publish(added.path);
+      await myEth.publish(added.path, this.state.name, this.state.description);
       this.setState({
         alert: {
           state: "success",
@@ -103,13 +119,13 @@ class Publish extends Component<
   render() {
     return (
       <div>
-        <Navbar currentTab="publish"/>
+        <Navbar currentTab="publish" />
         <div>
-          <div className="flex card lg:card-side bordered">
-            <figure className="flex-2 card">
-              <img src={this.state.backgroundUrl} />
-            </figure>
-            <div className="flex-1 max-w-lg my-8 mx-8">
+          <div className="grid grid-cols-1 md:grid-cols-11 items-center p-4 card lg:card-side bordered">
+            <div className="md:col-start-1 md:col-end-7 flex items-center">
+              <img className="rounded-2xl max-h-96 justify-self-center" src={this.state.backgroundUrl} />
+            </div>
+            <div className="md:col-start-8 md:col-end-11 max-w-lg">
               <div className="form-control">
                 <form onSubmit={this.handleSubmit}>
                   <label className="label">
@@ -119,6 +135,7 @@ class Publish extends Component<
                     type="text"
                     placeholder="name"
                     className="input input-bordered"
+                    value={this.state.name} onChange={this.handleNameChange}
                   />
 
                   <label className="label">
@@ -128,6 +145,7 @@ class Publish extends Component<
                     type="text"
                     placeholder="description"
                     className="input input-bordered"
+                    value={this.state.description} onChange={this.handleDescriptionChange}
                   />
 
                   <label className="label">
@@ -135,11 +153,11 @@ class Publish extends Component<
                   </label>
                   <label
                     className={`btn btn-outline ${
-                      this.state.file === null ? "" : "btn-accent"
+                      this.state.file === undefined ? "" : "btn-accent"
                     }`}
                   >
                     <span>
-                      {this.state.file === null
+                      {this.state.file === undefined
                         ? "Select a file"
                         : this.state.file.name}
                     </span>
