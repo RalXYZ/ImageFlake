@@ -121,7 +121,7 @@ class Publish extends Component<
       <div>
         <Navbar currentTab="publish" />
         <div className="grid grid-cols-1 md:grid-cols-11 items-center p-4 card lg:card-side bordered bg-neutral">
-          <div className="md:col-start-1 md:col-end-7 flex items-center">
+          <div className="md:col-start-1 md:col-end-7 flex items-center grid justify-items-center">
             <img
               className="rounded-2xl max-h-96 justify-self-center"
               src={this.state.backgroundUrl}

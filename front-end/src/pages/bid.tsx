@@ -109,7 +109,10 @@ class Bid extends Component<
   }
 
   async handleClaimSubmit(e) {
-    await myEth.claim(this.state.artworkDetail.hash, this.state.artworkDetail.currentBid);
+    await myEth.claim(
+      this.state.artworkDetail.hash,
+      this.state.artworkDetail.currentBid
+    );
     myEth.get(this.props.location.state.hash).then((e) => {
       this.setState({
         artworkDetail: e,
@@ -206,7 +209,8 @@ class Bid extends Component<
           <div className="stat-value">
             {this.state.artworkDetail.currentBid} wei
           </div>
-          {this.state.artworkDetail.currentBidder.toUpperCase() === myEth.account.toUpperCase() ? (
+          {this.state.artworkDetail.currentBidder.toUpperCase() ===
+          myEth.account.toUpperCase() ? (
             <div className="stat-desc text-success">
               You are currently the highest bidder
             </div>
@@ -216,8 +220,8 @@ class Bid extends Component<
             </div>
           )}
         </div>
-        <div className="stat">
-          <div className="">
+        <div className="stat flex flex-col">
+          <div className="mb-4">
             <div className="form-control block">
               <label className="input-group input-group-md">
                 <input
@@ -247,7 +251,7 @@ class Bid extends Component<
 
   statusUnclaimed() {
     return (
-      <div className="border stats border-base-300">
+      <div className="shadow stats">
         <div className="stat">
           <div className="stat-title">Bid Successful</div>
           <div className="stat-value">Unclaimed</div>
@@ -255,7 +259,8 @@ class Bid extends Component<
             <button
               className="btn btn-sm btn-success"
               disabled={
-                this.state.artworkDetail.currentBidder.toUpperCase() === myEth.account.toUpperCase()
+                this.state.artworkDetail.currentBidder.toUpperCase() ===
+                myEth.account.toUpperCase()
                   ? false
                   : true
               }
@@ -273,26 +278,28 @@ class Bid extends Component<
     return (
       <div>
         <Navbar currentTab="other" />
-        <div className="grid grid-cols-1 md:grid-cols-11 items-center p-4 card lg:card-side bordered bg-neutral">
-          <div className="md:col-start-1 md:col-end-7 flex items-center">
+        <div className="grid grid-cols-3 md:grid-cols-5 items-center p-4 card lg:card-side bordered bg-neutral">
+          <div className="col-span-3 flex items-center grid justify-items-center">
             <img
               className="rounded-2xl max-h-96 justify-self-center"
               src={`https://ipfs.infura.io/ipfs/${this.state.artworkDetail.hash}`}
             />
           </div>
-          <div className="md:col-start-8 md:col-end-11 max-w-lg">
-            <div className="shadow stats">
-              <div className="stat">
-                <div className="stat-title">Artwork Information</div>
-                <div className="stat-value text-accent">
-                  {this.state.artworkDetail.name}
-                </div>
-                <div className="stat-desc">
-                  {this.state.artworkDetail.description}
+          <div className="col-span-2 max-w-lg grid justify-items-center md:ml-4 mt-4 md:mt-0">
+            <div>
+              <div className="shadow stats mb-4">
+                <div className="stat">
+                  <div className="stat-title">Artwork Information</div>
+                  <div className="stat-value text-accent">
+                    {this.state.artworkDetail.name}
+                  </div>
+                  <div className="stat-desc">
+                    {this.state.artworkDetail.description}
+                  </div>
                 </div>
               </div>
+              {this.constructArtworkStatusCard()}
             </div>
-            {this.constructArtworkStatusCard()}
           </div>
         </div>
       </div>
