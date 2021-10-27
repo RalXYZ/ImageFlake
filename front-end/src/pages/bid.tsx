@@ -25,6 +25,10 @@ class Bid extends Component<
     artworkDetail: ArtworkDetail;
     selectedTime: string;
     price: number;
+    timeLast: number;
+    hour: number;
+    minute: number;
+    second: number;
   }
 > {
   constructor(props) {
@@ -43,12 +47,40 @@ class Bid extends Component<
       },
       selectedTime: "default",
       price: 0,
+      timeLast: 0,
+      hour: 0,
+      minute: 0,
+      second: 0,
     };
 
     myEth.get(this.props.location.state.hash).then((e) => {
+      const dateTime = Date.now();
+      const timestamp = Math.floor(dateTime / 1000);
+
+      const timeSpan = e.auctionEndTime - timestamp;
+
       this.setState({
         artworkDetail: e,
+        timeLast: timeSpan,
+        hour: Math.floor(timeSpan / 3600),
+        minute: Math.floor((timeSpan % 3600) / 60),
+        second: timeSpan % 60,
       });
+
+      const intervalId = setInterval(() => {
+        const timeSpan = this.state.timeLast - 1;
+        if (timeSpan < 0) {
+          clearInterval(intervalId);
+        }
+        this.setState({
+          timeLast: timeSpan,
+          hour: Math.floor(timeSpan / 3600),
+          minute: Math.floor((timeSpan % 3600) / 60),
+          second: timeSpan % 60,
+        });
+      }, 1000);
+
+      console.log(e);
     });
 
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
@@ -69,7 +101,7 @@ class Bid extends Component<
   async handleStartBidSubmit(e) {
     let timeSpan = 0;
     switch (this.state.selectedTime) {
-      case "minuet": {
+      case "minute": {
         timeSpan = 60;
         break;
       }
@@ -156,7 +188,7 @@ class Bid extends Component<
                     <option disabled={true} value="default">
                       Auction time
                     </option>
-                    <option value="minuet">1 minuet</option>
+                    <option value="minute">1 minute</option>
                     <option value="quatre">1 quatre</option>
                     <option value="hour">1 hour</option>
                   </select>
@@ -197,11 +229,17 @@ class Bid extends Component<
         <div className="stat">
           <div className="stat-title">Time Remaining</div>
           <div className="stat-value">
-            <span className="font-mono text-4xl countdown">10:24:59</span>
+            <span className="font-mono text-4xl countdown">
+              <span style={{ "--value": this.state.hour }}></span>:
+              <span style={{ "--value": this.state.minute }}></span>:
+              <span style={{ "--value": this.state.second }}></span>
+            </span>
           </div>
           <div className="stat-desc">
             Until{" "}
-            {new Date(this.state.artworkDetail.auctionEndTime).toLocaleString()}
+            {new Date(
+              this.state.artworkDetail.auctionEndTime * 1000
+            ).toLocaleString()}
           </div>
         </div>
         <div className="stat">
