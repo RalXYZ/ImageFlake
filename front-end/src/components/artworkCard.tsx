@@ -6,7 +6,7 @@ const ArtworkCard: FC<{
   imgUrl: string;
   name: string;
   description: string;
-  status: "owned" | "auctioning" | "pending";
+  status: "owned" | "auctioning" | "unclaimed";
 }> = (props) => (
   <div className="card shadow-2xl">
     <figure>
@@ -22,7 +22,7 @@ const ArtworkCard: FC<{
         >
           <Link
             to="/bid/"
-            state={{ hash: props.hash, backgroundUrl: props.imgUrl }}
+            state={{ hash: props.hash }}
           >
             {props.status}
           </Link>

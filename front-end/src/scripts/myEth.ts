@@ -48,24 +48,45 @@ class MyEth {
   }
 
   async listOwned(): Promise<ArtworkBrief[]> {
-    return await this.artFlake.methods.listOwned().call({
-      from: this.account,
-      gas: '3000000',
-    });
+    return await this.artFlake.methods.listOwned().call();
   }
 
   async get(hash: string): Promise<ArtworkDetail> {
     console.log(hash);
-    return await this.artFlake.methods.get(hash).call({
-      from: this.account,
-      gas: '3000000',
-    })
+    return await this.artFlake.methods.get(hash).call();
   }
 
   async publish(artworkHash: string, name: string, description: string)  {
     let foo = await this.artFlake.methods.post(artworkHash, name, description).send({
       from: this.account,
       // value: web3.utils.toWei('1', 'ether'),
+      gas: '3000000',
+    });
+    console.log(foo);
+  }
+
+  async startAuction(artworkHash: string, auctionEndTime: number, startingPrice: number) {
+    let foo = await this.artFlake.methods.startAuction(artworkHash, auctionEndTime).send({
+      from: this.account,
+      // value: web3.utils.toWei('1', 'ether'),
+      gas: '3000000',
+    });
+    console.log(foo);
+  }
+
+  async bid(artworkHash: string, price: number) {
+    let foo = await this.artFlake.methods.bid(artworkHash, price).send({
+      from: this.account,
+      // value: web3.utils.toWei('1', 'ether'),
+      gas: '3000000',
+    });
+    console.log(foo);
+  }
+
+  async claim(artworkHash: string, price: number) {
+    let foo = await this.artFlake.methods.collectBid(artworkHash).send({
+      from: this.account,
+      value: price,
       gas: '3000000',
     });
     console.log(foo);
