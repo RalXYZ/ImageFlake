@@ -13,6 +13,17 @@ export interface ArtworkBrief {
   auctionEndTime: number;
 }
 
+export interface ArtworkDetail {
+  hash: string;
+  name: string;
+  description: string;
+  isInAuction: boolean;
+  auctionEndTime: number;
+  historyHolder: string[];
+  currentBidder: string;
+  currentBid: number;
+}
+
 class MyEth {
   web3: Web3;
   artFlake: Contract;
@@ -39,9 +50,16 @@ class MyEth {
   async listOwned(): Promise<ArtworkBrief[]> {
     return await this.artFlake.methods.listOwned().call({
       from: this.account,
-      // value: web3.utils.toWei('1', 'ether'),
       gas: '3000000',
     });
+  }
+
+  async get(hash: string): Promise<ArtworkDetail> {
+    console.log(hash);
+    return await this.artFlake.methods.get(hash).call({
+      from: this.account,
+      gas: '3000000',
+    })
   }
 
   async publish(artworkHash: string, name: string, description: string)  {
