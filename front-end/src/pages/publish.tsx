@@ -3,6 +3,7 @@ import { Component } from "react";
 import { create } from "ipfs-http-client";
 import myEth from "../scripts/myEth";
 import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 import AlertOk from "../components/alert";
 import ethConfig from "../../config/eth.yaml";
 
@@ -118,7 +119,7 @@ class Publish extends Component<
 
   render() {
     return (
-      <div>
+      <div className="min-h-screen relative">
         <Navbar currentTab="publish" />
         <div className="grid grid-cols-1 md:grid-cols-11 items-center p-4 card lg:card-side bordered bg-neutral">
           <div className="md:col-start-1 md:col-end-7 flex items-center grid justify-items-center">
@@ -200,6 +201,7 @@ class Publish extends Component<
         </div>
 
         <AlertOk alert={this.state.alert} />
+        <Footer />
       </div>
     );
   }

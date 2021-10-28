@@ -8,7 +8,7 @@ const ArtworkCard: FC<{
   description: string;
   status: "owned" | "auctioning" | "unclaimed";
 }> = (props) => (
-  <div className="card shadow-2xl">
+  <div className="card shadow-2xl bg-neutral">
     <figure>
       <img src={props.imgUrl} />
     </figure>
@@ -17,13 +17,14 @@ const ArtworkCard: FC<{
         {props.name}
         <div
           className={`badge mx-2 ${
-            props.status === "owned" ? "" : "badge-accent"
+            props.status === "owned"
+              ? "badge-primary"
+              : props.status === "auctioning"
+              ? "badge-secondary"
+              : "badge-accent"
           }`}
         >
-          <Link
-            to="/bid/"
-            state={{ hash: props.hash }}
-          >
+          <Link to="/bid/" state={{ hash: props.hash }}>
             {props.status}
           </Link>
         </div>

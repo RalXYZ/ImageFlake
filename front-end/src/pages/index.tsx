@@ -5,7 +5,7 @@ import ArtworkCard from "../components/artworkCard";
 
 const IndexPage = () => {
   return (
-    <main>
+    <main className="min-h-screen relative">
       <Navbar currentTab="home"/>
       <div className="card">
         <div
@@ -25,9 +25,9 @@ const IndexPage = () => {
             <div className="max-w-md card-body">
               <h2 className="card-title">Art, Persistent, Safe</h2>
               <p>
-                Rerum reiciendis beatae tenetur excepturi aut pariatur est eos.
-                Sit sit necessitatibus veritatis sed molestiae voluptates
-                incidunt iure sapiente.
+                Store your favourite artwork on the block chain. 
+                Sell them freely. Bid the most wonderful artworks
+                with almost no fee. 
               </p>
               <div className="card-actions">
                 <button className="btn glass rounded-full">Get Started</button>

@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
 import Navbar from "../components/navbar";
+import Footer from "../components/footer";
+import OwnerHistory from "../components/ownerHistory";
 import myEth, { ArtworkBrief, ArtworkDetail } from "../scripts/myEth";
 
 export function calcArtworkStatus(
@@ -174,7 +176,7 @@ class Bid extends Component<
               htmlFor="my-modal-2"
               className="btn btn-sm btn-primary modal-button"
             >
-              start bid
+              Start Auction
             </label>
             <input type="checkbox" id="my-modal-2" className="modal-toggle" />
             <div className="modal">
@@ -192,7 +194,7 @@ class Bid extends Component<
                     <option value="quatre">1 quatre</option>
                     <option value="hour">1 hour</option>
                   </select>
-                  <label className="input-group input-group-md">
+                  <label className="input-group input-group-md mt-4">
                     <input
                       type="text"
                       placeholder="starting price"
@@ -206,12 +208,12 @@ class Bid extends Component<
                 <div className="modal-action">
                   <label
                     htmlFor="my-modal-2"
-                    className="btn btn-primary"
+                    className="btn btn-primary btn-sm"
                     onClick={this.handleStartBidSubmit}
                   >
                     Start
                   </label>
-                  <label htmlFor="my-modal-2" className="btn">
+                  <label htmlFor="my-modal-2" className="btn btn-sm">
                     Close
                   </label>
                 </div>
@@ -274,7 +276,7 @@ class Bid extends Component<
           </div>
           <div className="">
             <button
-              className="btn btn-secondary btn-active block"
+              className="btn btn-sm btn-secondary btn-active block"
               role="button"
               aria-pressed="true"
               onClick={this.handleBidSubmit}
@@ -295,7 +297,7 @@ class Bid extends Component<
           <div className="stat-value">Unclaimed</div>
           <div className="stat-actions">
             <button
-              className="btn btn-sm btn-success"
+              className="btn btn-sm btn-accent"
               disabled={
                 this.state.artworkDetail.currentBidder.toUpperCase() ===
                 myEth.account.toUpperCase()
@@ -314,14 +316,17 @@ class Bid extends Component<
 
   render() {
     return (
-      <div>
+      <div className="min-h-screen relative">
         <Navbar currentTab="other" />
         <div className="grid grid-cols-3 md:grid-cols-5 items-center p-4 card lg:card-side bordered bg-neutral">
           <div className="col-span-3 flex items-center grid justify-items-center">
+            <div>
             <img
               className="rounded-2xl max-h-96 justify-self-center"
               src={`https://ipfs.infura.io/ipfs/${this.state.artworkDetail.hash}`}
             />
+            <OwnerHistory list={this.state.artworkDetail.historyHolder}/>
+            </div>
           </div>
           <div className="col-span-2 max-w-lg grid justify-items-center md:ml-4 mt-4 md:mt-0">
             <div>
@@ -340,6 +345,7 @@ class Bid extends Component<
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
