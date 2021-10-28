@@ -37,7 +37,7 @@ contract Artwork {
         return ret;
     }
     
-    function startAuction(uint256 _auctionEndTime) external {
+    function startAuction(uint256 _auctionEndTime, uint256 _startingPrice) external {
         require(!isInAuction, "There exists an on-going auction");
         require(historyHolder[historyHolder.length - 1] == tx.origin, "You are not the current owner");
         isInAuction = true;
@@ -46,7 +46,7 @@ contract Artwork {
         // Set owner as the first bidder, so that the artwork can be
         // re-claimed by the owner if no one bidds it. 
         currentBidder = tx.origin;
-        currentBid = 0;
+        currentBid = _startingPrice;
     }
     
     function bid(uint256 _bid) external inAuction {

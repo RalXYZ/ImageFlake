@@ -133,9 +133,9 @@ contract ArtFlake {
     
     // Start an auction. This operation can only be done by
     // the owner of the artwork.
-    function startAuction(string memory artworkHash, uint256 auctionEndTime) external {
+    function startAuction(string memory artworkHash, uint256 auctionEndTime, uint256 startingPrice) external {
         uint index = findHashIndex(artworkHash, tx.origin);
-        holds[tx.origin][index].startAuction(auctionEndTime);
+        holds[tx.origin][index].startAuction(auctionEndTime, startingPrice);
     }
     
     // Bid a auction. This operation can be done by everyone.
