@@ -35,7 +35,7 @@ class Market extends Component<{}, { artworks: ArtworkBrief[] }> {
 
   render() {
     return (
-      <div className="min-h-screen flex flex-col justify-between">
+      <div className="min-h-screen flex flex-col justify-between p-2">
         <div>
           <Navbar currentTab="market" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

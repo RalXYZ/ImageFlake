@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 
 const IndexPage = () => {
   return (
-    <main className="min-h-screen mx-4 flex-col">
+    <main className="min-h-screen flex-col p-2">
       <div>
         <Navbar currentTab="home" />
         <div className="card">

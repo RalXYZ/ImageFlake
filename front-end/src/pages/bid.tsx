@@ -316,7 +316,7 @@ class Bid extends Component<
 
   render() {
     return (
-      <div className="min-h-screen flex flex-col justify-between">
+      <div className="min-h-screen flex flex-col justify-between p-2">
         <div>
           <Navbar currentTab="other" />
           <div className="grid grid-cols-3 md:grid-cols-5 items-center p-4 card lg:card-side bordered bg-neutral">
@@ -329,8 +329,8 @@ class Bid extends Component<
                 <OwnerHistory list={this.state.artworkDetail.historyHolder} />
               </div>
             </div>
-            <div className="col-span-2 max-w-lg grid justify-items-center md:ml-4 mt-4 md:mt-0">
-              <div>
+            <div className="col-span-2 max-w-lg grid justify-items-center md:ml-4 mt-4 md:mt-0 flex ">
+              <div className="flex flex-col">
                 <div className="shadow stats mb-4">
                   <div className="stat">
                     <div className="stat-title">Artwork Information</div>

@@ -119,11 +119,11 @@ class Publish extends Component<
 
   render() {
     return (
-      <div className="min-h-screen flex flex-col justify-between">
+      <div className="min-h-screen flex flex-col justify-between p-2">
         <div>
           <Navbar currentTab="publish" />
           <div className="grid grid-cols-1 md:grid-cols-11 items-center p-4 card lg:card-side bordered bg-neutral">
-            <div className="md:col-start-1 md:col-end-7 flex items-center grid justify-items-center">
+            <div className="md:col-start-1 md:col-end-7 md:grid">
               <img
                 className="rounded-2xl max-h-96 justify-self-center"
                 src={this.state.backgroundUrl}
@@ -131,7 +131,7 @@ class Publish extends Component<
             </div>
             <div className="md:col-start-8 md:col-end-11 max-w-lg">
               <div className="form-control">
-                <form onSubmit={this.handleSubmit}>
+                <form className="flex flex-col" onSubmit={this.handleSubmit}>
                   <label className="label">
                     <span className="label-text">Name</span>
                   </label>
@@ -157,45 +157,46 @@ class Publish extends Component<
                   <label className="label">
                     <span className="label-text">Artwork</span>
                   </label>
-                  <label
-                    className={`btn btn-outline ${
-                      this.state.file === undefined ? "" : "btn-accent"
-                    }`}
-                  >
-                    <span>
-                      {this.state.file === undefined
-                        ? "Select a file"
-                        : this.state.file.name}
-                    </span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      className="inline-block w-6 h-6 ml-2 stroke-current"
+                    <label
+                      className={`btn btn-outline ${
+                        this.state.file === undefined ? "" : "btn-accent"
+                      }`}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 5l7 7-7 7"
-                      ></path>
-                    </svg>
-                    <input
-                      type="file"
-                      name="myImage"
-                      onChange={this.onImageChange}
-                      className="hidden"
-                    />
-                  </label>
+                      <span>
+                        {this.state.file === undefined
+                          ? "Select a file"
+                          : this.state.file.name}
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        className="inline-block w-6 h-6 ml-2 stroke-current"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 5l7 7-7 7"
+                        ></path>
+                      </svg>
+                      <input
+                        type="file"
+                        name="myImage"
+                        onChange={this.onImageChange}
+                        className="hidden"
+                      />
+                    </label>
 
-                  <button
-                    className={`btn btn-primary btn-lg my-4 ${
-                      this.state.submitting ? "loading" : ""
-                    }`}
-                    type="submit"
-                  >
-                    Submit Artwork
-                  </button>
+                    <button
+                      className={`btn btn-primary btn-lg my-4 ${
+                        this.state.submitting ? "loading" : ""
+                      }`}
+                      type="submit"
+                    >
+                      Submit Artwork
+                    </button>
+                    
                 </form>
               </div>
             </div>
