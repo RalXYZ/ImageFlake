@@ -35,10 +35,12 @@ class Me extends Component<{}, { artworks: ArtworkBrief[] }> {
 
   render() {
     return (
-      <div className="min-h-screen relative">
-        <Navbar currentTab="other" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {this.state.artworks.map((e, i) => this.constructArtworkCard(e, i))}
+      <div className="min-h-screen flex flex-col justify-between">
+        <div>
+          <Navbar currentTab="other" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {this.state.artworks.map((e, i) => this.constructArtworkCard(e, i))}
+          </div>
         </div>
         <Footer />
       </div>

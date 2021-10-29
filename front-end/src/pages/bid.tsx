@@ -316,32 +316,34 @@ class Bid extends Component<
 
   render() {
     return (
-      <div className="min-h-screen relative">
-        <Navbar currentTab="other" />
-        <div className="grid grid-cols-3 md:grid-cols-5 items-center p-4 card lg:card-side bordered bg-neutral">
-          <div className="col-span-3 flex items-center grid justify-items-center">
-            <div>
-            <img
-              className="rounded-2xl max-h-96 justify-self-center"
-              src={`https://ipfs.infura.io/ipfs/${this.state.artworkDetail.hash}`}
-            />
-            <OwnerHistory list={this.state.artworkDetail.historyHolder}/>
+      <div className="min-h-screen flex flex-col justify-between">
+        <div>
+          <Navbar currentTab="other" />
+          <div className="grid grid-cols-3 md:grid-cols-5 items-center p-4 card lg:card-side bordered bg-neutral">
+            <div className="col-span-3 flex items-center grid justify-items-center">
+              <div>
+                <img
+                  className="rounded-2xl max-h-96 justify-self-center"
+                  src={`https://ipfs.infura.io/ipfs/${this.state.artworkDetail.hash}`}
+                />
+                <OwnerHistory list={this.state.artworkDetail.historyHolder} />
+              </div>
             </div>
-          </div>
-          <div className="col-span-2 max-w-lg grid justify-items-center md:ml-4 mt-4 md:mt-0">
-            <div>
-              <div className="shadow stats mb-4">
-                <div className="stat">
-                  <div className="stat-title">Artwork Information</div>
-                  <div className="stat-value text-accent">
-                    {this.state.artworkDetail.name}
-                  </div>
-                  <div className="stat-desc">
-                    {this.state.artworkDetail.description}
+            <div className="col-span-2 max-w-lg grid justify-items-center md:ml-4 mt-4 md:mt-0">
+              <div>
+                <div className="shadow stats mb-4">
+                  <div className="stat">
+                    <div className="stat-title">Artwork Information</div>
+                    <div className="stat-value text-accent">
+                      {this.state.artworkDetail.name}
+                    </div>
+                    <div className="stat-desc">
+                      {this.state.artworkDetail.description}
+                    </div>
                   </div>
                 </div>
+                {this.constructArtworkStatusCard()}
               </div>
-              {this.constructArtworkStatusCard()}
             </div>
           </div>
         </div>
