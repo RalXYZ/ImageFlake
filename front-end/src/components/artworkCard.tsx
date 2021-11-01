@@ -9,8 +9,8 @@ const ArtworkCard: FC<{
   status: "owned" | "auctioning" | "unclaimed";
 }> = (props) => (
   <div className="card shadow-2xl bg-neutral">
-    <figure>
-      <img src={props.imgUrl} />
+    <figure className="card">
+      <img src={props.imgUrl}/>
     </figure>
     <div className="card-body">
       <h2 className="card-title">

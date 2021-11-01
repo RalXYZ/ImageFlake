@@ -76,7 +76,7 @@ class MyEth {
   }
 
   async startAuction(artworkHash: string, auctionEndTime: number, startingPrice: number) {
-    let foo = await this.artFlake.methods.startAuction(artworkHash, auctionEndTime, startingPrice).send({
+    let foo = await this.artFlake.methods.startAuction(artworkHash, auctionEndTime, web3.utils.toWei(startingPrice.toString(), 'ether')).send({
       from: this.account,
       // value: web3.utils.toWei('1', 'ether'),
       gas: '3000000',
@@ -85,7 +85,7 @@ class MyEth {
   }
 
   async bid(artworkHash: string, price: number) {
-    let foo = await this.artFlake.methods.bid(artworkHash, price).send({
+    let foo = await this.artFlake.methods.bid(artworkHash, web3.utils.toWei(price.toString(), 'ether')).send({
       from: this.account,
       // value: web3.utils.toWei('1', 'ether'),
       gas: '3000000',

@@ -1,9 +1,12 @@
 import * as React from "react";
+import Web3 from "web3";
 import { Component } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import OwnerHistory from "../components/ownerHistory";
 import myEth, { ArtworkBrief, ArtworkDetail } from "../scripts/myEth";
+import AlertOk from "../components/alert";
+import type { AlertInterface } from "./publish";
 
 export function calcArtworkStatus(
   artwork: ArtworkBrief | ArtworkDetail
@@ -31,6 +34,7 @@ class Bid extends Component<
     hour: number;
     minute: number;
     second: number;
+    alert: AlertInterface;
   }
 > {
   constructor(props) {
@@ -53,6 +57,11 @@ class Bid extends Component<
       hour: 0,
       minute: 0,
       second: 0,
+      alert: {
+        state: "error",
+        hidden: true,
+        message: "",
+      },
     };
 
     myEth.get(this.props.location.state.hash).then((e) => {
@@ -126,15 +135,67 @@ class Bid extends Component<
       this.state.price
     );
 
-    myEth.get(this.props.location.state.hash).then((e) => {
-      this.setState({
-        artworkDetail: e,
+    myEth
+      .get(this.props.location.state.hash)
+      .then((e) => {
+        const dateTime = Date.now();
+        const timestamp = Math.floor(dateTime / 1000);
+        const timeSpan = e.auctionEndTime - timestamp;
+        this.setState({
+          artworkDetail: e,
+          timeLast: timeSpan,
+          hour: Math.floor(timeSpan / 3600),
+          minute: Math.floor((timeSpan % 3600) / 60),
+          second: timeSpan % 60,
+        });
+      })
+      .then(() => {
+        const intervalId = setInterval(() => {
+          const timeSpan = this.state.timeLast - 1;
+          if (timeSpan < 0) {
+            clearInterval(intervalId);
+          }
+          this.setState({
+            timeLast: timeSpan,
+            hour: Math.floor(timeSpan / 3600),
+            minute: Math.floor((timeSpan % 3600) / 60),
+            second: timeSpan % 60,
+          });
+        }, 1000);
       });
-    });
   }
 
   async handleBidSubmit(e) {
-    await myEth.bid(this.state.artworkDetail.hash, this.state.price);
+    try { 
+      await myEth.bid(this.state.artworkDetail.hash, this.state.price);
+      this.setState({
+        alert: {
+          state: "success",
+          hidden: false,
+          message: "Publish success",
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        alert: {
+          state: "error",
+          hidden: false,
+          message: err.message,
+        },
+      });
+      const intervalId = setInterval(() => {
+        this.setState({
+          alert: {
+            state: "error",
+            hidden: true,
+            message: "",
+          },
+        });
+        clearInterval(intervalId);
+      }, 5000);
+    }
+    
     myEth.get(this.props.location.state.hash).then((e) => {
       this.setState({
         artworkDetail: e,
@@ -202,7 +263,7 @@ class Bid extends Component<
                       value={this.state.price}
                       onChange={this.handlePriceChange}
                     />
-                    <span>wei</span>
+                    <span>ETH</span>
                   </label>
                 </div>
                 <div className="modal-action">
@@ -247,7 +308,11 @@ class Bid extends Component<
         <div className="stat">
           <div className="stat-title">Current Bid</div>
           <div className="stat-value">
-            {this.state.artworkDetail.currentBid} wei
+            {Web3.utils.fromWei(
+              this.state.artworkDetail.currentBid.toString(),
+              "ether"
+            )}{" "}
+            ETH
           </div>
           {this.state.artworkDetail.currentBidder.toUpperCase() ===
           myEth.account.toUpperCase() ? (
@@ -270,7 +335,7 @@ class Bid extends Component<
                   value={this.state.price}
                   onChange={this.handlePriceChange}
                 />
-                <span>wei</span>
+                <span>ETH</span>
               </label>
             </div>
           </div>
@@ -346,6 +411,7 @@ class Bid extends Component<
               </div>
             </div>
           </div>
+          <AlertOk alert={this.state.alert} />
         </div>
         <Footer />
       </div>

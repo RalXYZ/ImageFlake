@@ -38,7 +38,7 @@ class Me extends Component<{}, { artworks: ArtworkBrief[] }> {
       <div className="min-h-screen flex flex-col justify-between p-2">
         <div>
           <Navbar currentTab="other" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {this.state.artworks.map((e, i) => this.constructArtworkCard(e, i))}
           </div>
         </div>
